@@ -1,0 +1,114 @@
+# Ghostty configuration
+# Mirrors ~/.config/kitty/kitty.conf: DepartureMono Nerd Font 18, Catppuccin
+# Mocha (the one deliberate change from kitty's Dracula), 60% opacity with 40px
+# blur, hidden titlebar, block cursor, macOS Option-as-Alt on the left, and the
+# same CSI-u Enter mappings. zellij owns tabs and panes.
+
+# Font
+font-family = DepartureMono Nerd Font
+font-size = 18
+# kitty's disable_ligatures never is Ghostty's default; nothing to set.
+# To turn ligatures off: font-feature = -calt, -liga, -dlig
+
+# Window
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = false
+# Smooth glyph edges on the translucent background instead of the native
+# P3 blending, which leaves dark fringes around text at 60% opacity.
+alpha-blending = linear-corrected
+# Hides the titlebar but keeps the native frame, rounded corners and window
+# buttons, like kitty's hide_window_decorations yes.
+macos-titlebar-style = hidden
+confirm-close-surface = false
+background-opacity = 0.6
+background-blur = 40
+# kitty's cursor_trail 1 is reproduced by the cursor_tail shader vendored from
+# sahaj-b/cursor-shaders (MIT); see ghostty/shaders/cursor_tail.glsl.
+custom-shader = shaders/cursor_tail.glsl
+# Animate while focused; use `always` to keep animating unfocused splits too.
+custom-shader-animation = true
+
+# kitty's visual_bell_duration has no Ghostty equivalent; bell-features below
+# keeps the border flash and dock attention instead.
+
+# Aesthetics - our custom dhanuz-mocha theme (Catppuccin Mocha, corrected).
+# Files live in ~/.config/ghostty/themes; `theme = Catppuccin Mocha` switches
+# back to the stock built-in palette.
+theme = dhanuz-mocha
+# Cursor colour is set here, not only in the theme, so it survives theme
+# swaps. Purple = Catppuccin mauve. Alternatives:
+#   vivid purple #bd93f9 | graphite grey #a6adc8 | rosewater #f5e0dc
+cursor-color = #cba6f7
+cursor-text = #1e1e2e
+# Avoid a hard contrast floor that could crush intentional dim text, but stop
+# foreground/background from becoming unreadable.
+minimum-contrast = 1.1
+
+cursor-style = block
+cursor-style-blink = true
+bell-features = no-audio,no-system,attention,border,no-title
+
+# Tabs belong to zellij (Ctrl t), not to the terminal. These unbind the
+# window-creating defaults so they cannot spawn a duplicate view of zellij;
+# Ghostty's tab bar only lives in the (hidden) titlebar anyway.
+keybind = super+t=unbind
+keybind = super+n=unbind
+# Let Cmd+1..Cmd+0 and Ctrl+Tab reach the terminal app (OpenCode uses them for
+# its session tabs). Ghostty grabs them by default for its own goto_tab,
+# next_tab/previous_tab and font reset.
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+keybind = super+0=unbind
+keybind = ctrl+tab=unbind
+keybind = ctrl+shift+tab=unbind
+
+# Keyboard
+# macOS has no Alt key: Option is it. `left` sends a real Alt from the left
+# Option key and leaves the right one for typing Unicode, matching kitty's
+# macos_option_as_alt left.
+macos-option-as-alt = left
+
+# Send Shift+Enter as CSI-u so TUIs can distinguish it from Enter.
+keybind = shift+enter=text:\x1b[13;2u
+
+# Send Alt+Shift+Enter as CSI-u so tmux/zellij can match M-S-Enter.
+keybind = alt+shift+enter=text:\x1b[13;4u
+
+# Ghostty's shell integration switches the cursor to a bar at the prompt;
+# kitty does not, so keep the block cursor everywhere.
+shell-integration-features = no-cursor
+
+# ---------------------------------------------------------------------------
+# kitty settings carried over without a Ghostty equivalent, kept here so the
+# port stays auditable (see README "Coming from kitty" for the full table):
+#
+#   tab_bar_edge bottom / tab_bar_style powerline / tab_powerline_style
+#   slanted / tab_title_template "{index}"
+#     Ghostty has no bottom tab bar on macOS (window-show-tab-bar is GTK
+#     only). With macos-titlebar-style = hidden no tab strip is drawn at all;
+#     zellij owns tabs and their titles.
+#
+#   visual_bell_duration 0.1
+#     Ghostty has no bell duration knob; bell-features = border flashes the
+#     surface instead and attention bounces the dock.
+#
+#   url_color #8be9fd (from themes/dracula.conf)
+#     Ghostty has no link colour option; links use the theme's normal colours.
+#
+#   listen_on unix:${XDG_RUNTIME_DIR}/omarchy-kitty-{kitty_pid}
+#     kitty remote-control/cwd socket. It is inert on macOS because
+#     XDG_RUNTIME_DIR is unset, and has no Ghostty equivalent.
+#
+#   Theme chrome colours (active_border_color, inactive_border_color,
+#   bell_border_color, active_tab_*, inactive_tab_*)
+#     These style kitty's tab bar and window borders, which Ghostty does not
+#     draw on macOS. The terminal palette itself is set exactly above.
+# ---------------------------------------------------------------------------

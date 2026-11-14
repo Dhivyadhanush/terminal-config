@@ -1,0 +1,41 @@
+# dhanuz-mocha
+#
+# Our house theme: Catppuccin Mocha, colour-corrected for a dark, translucent
+# Ghostty window. Base palette: Catppuccin Mocha (MIT, https://catppuccin.com).
+#
+# Corrections over Ghostty's built-in "Catppuccin Mocha", measured against
+# background #1e1e2e (WCAG contrast):
+#
+#   ANSI 8  bright black   #585b70 (2.46:1) -> #7f849c (4.44:1)
+#   ANSI 7  white          #bac2de (9.26:1) -> #cdd6f4 (11.34:1)
+#   ANSI 15 bright white   #a6adc8 (7.37:1) -> #f5e0dc (12.95:1)
+#   ANSI 13 bright pink    #f398da (8.06:1) -> #f9c9ee (11.42:1)
+#
+# The built-in theme had ANSI 15 darker than ANSI 7 (an inverted white pair)
+# and ANSI 13 darker than ANSI 5 (an inverted pink pair); both are fixed here.
+# Selection uses surface2 + text instead of rosewater reverse-video, and the
+# cursor is mauve #cba6f7 so the cursor and its trail stand out on the base.
+
+background = #1e1e2e
+foreground = #cdd6f4
+cursor-color = #cba6f7
+cursor-text = #1e1e2e
+selection-background = #585b70
+selection-foreground = #cdd6f4
+
+palette = 0=#45475a
+palette = 1=#f38ba8
+palette = 2=#a6e3a1
+palette = 3=#f9e2af
+palette = 4=#89b4fa
+palette = 5=#f5c2e7
+palette = 6=#94e2d5
+palette = 7=#cdd6f4
+palette = 8=#7f849c
+palette = 9=#f7aec2
+palette = 10=#c2ecbf
+palette = 11=#fcd682
+palette = 12=#aeccfc
+palette = 13=#f9c9ee
+palette = 14=#b1eae1
+palette = 15=#f5e0dc
