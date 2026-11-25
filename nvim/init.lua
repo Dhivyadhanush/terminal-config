@@ -1,11 +1,15 @@
--- ~/.config/nvim/init.lua
--- Minimal starter config. Everything here is optional; Neovim works without it.
+--  ██████╗  ██╗ ██╗   ██╗ ██╗
+--  ██╔══██╗ ██║ ██║   ██║ ██║
+--  ██║  ██║ ██║ ██║   ██║ ██║
+--  ██║  ██║ ██║ ╚██╗ ██╔╝ ██║
+--  ██████╔╝ ██║  ╚████╔╝  ██║
+--  ╚═════╝  ╚═╝   ╚═══╝   ╚═╝
+--
+--  DIVI · a personal Neovim distribution built on LazyVim.
+--  Your settings live in lua/divi/settings.lua  —  run :Divi for the panel.
 
--- Line numbers: absolute on the cursor line, distance from cursor elsewhere.
-vim.opt.number = true
-vim.opt.relativenumber = true
+-- bootstrap lazy.nvim, LazyVim and the DIVI plugins
+require("config.lazy")
 
--- Colours
-vim.opt.termguicolors = true      -- 24-bit colour (needs a modern terminal)
-vim.cmd("syntax on")              -- syntax highlighting on
-vim.cmd.colorscheme("catppuccin") -- try :colorscheme <Tab> to preview others
+-- DIVI's own layer: commands, keymaps, theme hooks
+require("divi")

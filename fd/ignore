@@ -1,0 +1,19 @@
+# Global ignore file for `fd` (used by the Neovim pickers and project scan).
+# Keeps searching ~ fast and quiet: these folders are never source code.
+Library/
+Movies/
+Music/
+Pictures/
+Applications/
+Public/
+node_modules/
+.venv/
+venv/
+venv_aws/
+__pycache__/
+dist/
+build/
+.next/
+target/
+.Trash/
+BACKUP/

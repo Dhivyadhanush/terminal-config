@@ -229,6 +229,7 @@ link "$REPO/shell/p10k.zsh"   "$HOME/.p10k.zsh"
 link "$REPO/nvim"             "$HOME/.config/nvim"
 link "$REPO/ghostty"          "$HOME/.config/ghostty"
 link "$REPO/zellij"           "$HOME/.config/zellij"
+link "$REPO/fd"               "$HOME/.config/fd"
 
 # ---------- 8. ghostty ----------
 step "Ghostty"
