@@ -106,6 +106,12 @@ link "$REPO/ghostty"        "$HOME/.config/ghostty"
 link "$REPO/zellij"         "$HOME/.config/zellij"
 link "$REPO/fd"             "$HOME/.config/fd"
 
+# maintenance scripts (`update`, `brewup`)
+mkdir -p "$HOME/.local/bin"
+for f in brewup update; do
+  link "$REPO/bin/$f" "$HOME/.local/bin/$f"
+done
+
 # ---------- 5. login shell ----------
 step "Login shell"
 case "${SHELL:-}" in

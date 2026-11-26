@@ -49,6 +49,8 @@ nvim/                 -> ~/.config/nvim     (DIVI: a full Neovim IDE, see nvim/R
 ghostty/              -> ~/.config/ghostty   (config + theme + shader)
 zellij/config.kdl     -> ~/.config/zellij/config.kdl
 fd/ignore             -> ~/.config/fd/ignore (keeps pickers fast by skipping Library/, node_modules/, …)
+bin/update            -> ~/.local/bin/update (one-command Homebrew maintenance)
+bin/brewup            -> ~/.local/bin/brewup (the script behind `update`)
 ```
 
 Configs are **symlinked**, so editing in place edits the repo and `git pull` updates your setup.
@@ -75,6 +77,21 @@ fuzzy find, git UI, notes, AI, debugger and SQL, all in the terminal.
 Everything you'd customize lives in `lua/divi/` — `settings.lua` (name, colours,
 feature switches, vault path), `theme.lua` (palette), `keymaps.lua`, `plugins/`.
 LazyVim updates never touch it. Full manual: [`nvim/README.md`](nvim/README.md).
+
+## Maintenance
+
+```sh
+update                 # brew update + upgrade formulae/casks + cleanup + autoremove
+update -n              # dry run
+update --no-greedy     # skip self-updating apps (Chrome, VS Code)
+update --no-cleanup    # upgrade only
+update --doctor        # also run brew doctor
+```
+
+`update` wraps `bin/brewup`: it updates the index, upgrades formulae and casks
+(including `--greedy` apps), prunes old versions and unused dependencies, then
+prints a summary (packages upgraded, cache size). Every step runs even if one
+fails, and it exits `1` with the failures listed — safe for cron/launchd.
 
 ## Backups
 

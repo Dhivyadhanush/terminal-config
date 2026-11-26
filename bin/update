@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# update — update everything Homebrew manages.
+# A thin wrapper so you can just type `update`:
+#
+#   update                brew update + upgrade + cleanup + autoremove
+#   update -n             dry run, show what would happen
+#   update --no-greedy    skip self-updating apps
+#   update --no-cleanup   skip the prune steps
+#   update --help         full options (same as brewup)
+
+BREWUP="$(command -v brewup || true)"
+[ -n "$BREWUP" ] || BREWUP="$HOME/bin/brewup"
+
+if [ ! -x "$BREWUP" ]; then
+  printf 'update: brewup not found (expected %s)\n' "$BREWUP" >&2
+  exit 1
+fi
+
+exec "$BREWUP" "$@"

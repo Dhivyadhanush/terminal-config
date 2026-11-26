@@ -231,6 +231,12 @@ link "$REPO/ghostty"          "$HOME/.config/ghostty"
 link "$REPO/zellij"           "$HOME/.config/zellij"
 link "$REPO/fd"               "$HOME/.config/fd"
 
+# maintenance scripts (`update`, `brewup`) — ~/.local/bin is on PATH via zshrc
+mkdir -p "$HOME/.local/bin"
+for f in brewup update; do
+  link "$REPO/bin/$f" "$HOME/.local/bin/$f"
+done
+
 # ---------- 8. ghostty ----------
 step "Ghostty"
 if command -v ghostty >/dev/null 2>&1; then

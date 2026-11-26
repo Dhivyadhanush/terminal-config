@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+#
+# brewup — one command to update, upgrade and prune everything Homebrew manages.
+#
+#   brewup                 update index, upgrade formulae + casks, cleanup, autoremove
+#   brewup -n              dry run: print what would be executed, change nothing
+#   brewup --no-greedy     skip apps that update themselves (Chrome, VS Code, …)
+#   brewup --no-cleanup    skip the prune/autoremove steps
+#   brewup --doctor        also run `brew doctor`
+#   brewup -q              quieter output
+#   brewup -h              this help
+#
+# Exit code 0 when every step worked, 1 when something failed (everything else
+# still ran to completion). Safe to re-run; it is idempotent.
+
+set -uo pipefail
+
+GREEDY=1
+CLEAN=1
+DRY=0
+QUIET=0
+DOCTOR=0
+
+# ---------- args ----------
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--dry-run)   DRY=1 ;;
+    -g|--greedy)    GREEDY=1 ;;
+    --no-greedy)    GREEDY=0 ;;
+    --no-cleanup)   CLEAN=0 ;;
+    --doctor)       DOCTOR=1 ;;
+    -q|--quiet)     QUIET=1 ;;
+    -h|--help)      sed -n '3,14p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *)              printf 'brewup: unknown option %s (try --help)\n' "$1" >&2; exit 2 ;;
+  esac
+  shift
+done
+
+# ---------- output ----------
+if [ -t 1 ] && [ "$QUIET" -eq 0 ]; then
+  B=$'\033[1m'; D=$'\033[2m'; G=$'\033[32m'; Y=$'\033[33m'; R=$'\033[31m'; C=$'\033[36m'; N=$'\033[0m'
+else
+  B=''; D=''; G=''; Y=''; R=''; C=''; N=''
+fi
+step() { [ "$QUIET" -eq 1 ] && return 0; printf '\n%s==> %s%s\n' "$B$C" "$*" "$N"; }
+ok()   { printf '  %s✓%s %s\n' "$G" "$N" "$*"; }
+warn() { printf '  %s!%s %s\n' "$Y" "$N" "$*"; }
+run_() { [ "$QUIET" -eq 1 ] || printf '  %s$ %s%s\n' "$D" "$*" "$N"; }
+
+FAILS=""
+fail() { FAILS="$FAILS
+  - $*"; }
+
+# Run a command: in dry-run mode just echo it; otherwise run it and remember
+# failures without aborting the rest of the run.
+soft() {
+  if [ "$DRY" -eq 1 ]; then
+    run_ "$@"
+    return 0
+  fi
+  run_ "$@"
+  "$@"
+  local rc=$?
+  if [ "$rc" -ne 0 ]; then
+    fail "$* (exit $rc)"
+    warn "step failed: $*"
+  fi
+  return 0
+}
+
+# ---------- checks ----------
+if ! command -v brew >/dev/null 2>&1; then
+  printf 'brewup: Homebrew not found — install it from https://brew.sh\n' >&2
+  exit 1
+fi
+
+# Brew only updates its index when asked; no implicit updates for the rest.
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_ENV_HINTS=1
+
+outdated_count() {
+  local list
+  list="$(brew outdated --quiet 2>/dev/null)"
+  [ -z "$list" ] && { echo 0; return; }
+  printf '%s\n' "$list" | wc -l | tr -d ' '
+}
+
+cache_size() {
+  local dir
+  dir="$(brew --cache 2>/dev/null)" || return 0
+  [ -d "$dir" ] && du -sh "$dir" 2>/dev/null | awk '{print $1}'
+}
+
+printf '\n%sbrewup%s · %s · %s%s%s\n' "$B$C" "$N" "$(brew --version | head -1)" "$D" "$(date '+%Y-%m-%d %H:%M')" "$N"
+[ "$DRY" -eq 1 ] && warn "dry run — nothing will be modified"
+
+# ---------- 1. update the index (and Homebrew itself) ----------
+step "brew update"
+soft brew update
+
+# ---------- 2. what is out of date ----------
+before="$(outdated_count)"
+cache_before="$(cache_size)"
+
+step "Outdated"
+if [ "$before" -eq 0 ]; then
+  ok "everything is already up to date"
+else
+  if [ "$QUIET" -eq 0 ]; then
+    printf '  %s%s%s package(s) behind:%s\n' "$B" "$before" "$N" ""
+    brew outdated --quiet 2>/dev/null | sed 's/^/    /' | head -40
+    [ "$before" -gt 40 ] && printf '    %s… and %s more%s\n' "$D" "$((before - 40))" "$N"
+  fi
+
+  # ---------- 3. upgrade formulae + casks ----------
+  step "brew upgrade"
+  soft brew upgrade
+
+  if [ "$GREEDY" -eq 1 ]; then
+    step "brew upgrade --cask --greedy (self-updating apps)"
+    soft brew upgrade --cask --greedy
+  else
+    warn "skipping greedy casks (pass --greedy to include them)"
+  fi
+fi
+
+# ---------- 4. prune ----------
+if [ "$CLEAN" -eq 1 ]; then
+  step "brew cleanup --prune=all"
+  soft brew cleanup --prune=all
+
+  step "brew autoremove (unused dependencies)"
+  soft brew autoremove
+else
+  warn "skipping cleanup (--no-cleanup)"
+fi
+
+# ---------- 5. optional health check ----------
+if [ "$DOCTOR" -eq 1 ]; then
+  step "brew doctor"
+  brew doctor || warn "brew doctor reported warnings (usually harmless)"
+fi
+
+# ---------- summary ----------
+after="$(outdated_count)"
+cache_after="$(cache_size)"
+upgraded=$((before - after))
+[ "$upgraded" -lt 0 ] && upgraded=0
+
+printf '\n%s==> Summary%s\n' "$B$C" "$N"
+printf '  upgraded:      %s\n' "$upgraded"
+printf '  still behind:  %s\n' "$after"
+if [ -n "$cache_before" ] || [ -n "$cache_after" ]; then
+  printf '  cache:         %s -> %s\n' "${cache_before:-?}" "${cache_after:-?}"
+fi
+if [ "$DRY" -eq 1 ]; then
+  printf '  %sdry run: nothing was changed%s\n' "$D" "$N"
+fi
+
+if [ -n "$FAILS" ]; then
+  printf '\n%s==> Failures%s%s\n' "$B$R" "$N"
+  printf '%s\n' "$FAILS"
+  exit 1
+fi
+
+printf '\n'
+ok "done"
