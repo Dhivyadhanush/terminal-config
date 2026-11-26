@@ -7,6 +7,14 @@ return {
     name = "catppuccin",
     priority = 1000,
     lazy = false,
+    opts = function()
+      local S = require("divi.settings")
+      return {
+        flavour = "mocha",
+        color_overrides = { mocha = require("divi.theme").palette },
+        transparent_background = S.transparent,
+      }
+    end,
   },
   {
     "LazyVim/LazyVim",

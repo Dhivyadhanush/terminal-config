@@ -1,9 +1,5 @@
 # DIVI
 
-> Part of [terminal-config](../README.md). `install.sh` / `install-macos.sh`
-> symlink this folder to `~/.config/nvim`, so edits here are your live config
-> and `git pull` updates your editor.
-
 ```
 ██████╗  ██╗ ██╗   ██╗ ██╗
 ██╔══██╗ ██║ ██║   ██║ ██║
@@ -64,6 +60,8 @@ Everything DIVI-specific is in one folder, so LazyVim updates never touch it:
 | --- | --- | --- |
 | Name on the statusline / start screen | `lua/divi/settings.lua` (`name`) | `:DiviReload` |
 | Accent colour | `lua/divi/settings.lua` (`accent`, `accent2`) | `:DiviReload` |
+| Transparency | `lua/divi/settings.lua` (`transparent`, `blend`) | `:DiviReload` |
+| Terminal palette | Ghostty's `theme = …` (DIVI reads it) | `:DiviReload` |
 | Background / full palette | `lua/divi/theme.lua` | `:DiviReload` |
 | Shortcuts | `lua/divi/keymaps.lua` | `:DiviReload` |
 | Turn a feature off | `lua/divi/settings.lua` (`features = {...}`) | restart |
@@ -251,7 +249,12 @@ Set any to `false` and restart. Plugins for disabled features are not loaded.
 
 ## Troubleshooting
 
-- **Colours look wrong** → `:colorscheme divi`, or `:DiviReload`.
+- **Colours look wrong** → `:colorscheme divi`, or `:DiviReload`. The palette is
+  read from `~/.config/ghostty/config` + its `themes/*` file, so terminal and
+  editor always match.
+- **Too transparent / not enough** → `blend` in `lua/divi/settings.lua`
+  (0 = solid popups, 30 = very see-through); `transparent = false` turns the
+  see-through background off completely.
 - **Icons are boxes** → the terminal font needs Nerd Font glyphs
   (Ghostty already uses `DepartureMono Nerd Font` here).
 - **`Alt-1` does nothing** → terminal intercepts it; use `<Space>e`.

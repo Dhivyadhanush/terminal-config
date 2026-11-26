@@ -3,7 +3,9 @@
 -- ║  The branded start screen, the statusline and the tab bar.        ║
 -- ╚══════════════════════════════════════════════════════════════════╝
 local S = require("divi.settings")
-local P = require("divi.theme").palette
+local T = require("divi.theme")
+local P = T.palette
+local ACCENT, ACCENT2 = T.accent, T.accent2
 
 local header = table.concat({
   "",
@@ -23,6 +25,35 @@ return {
   {
     "snacks.nvim",
     opts = function(_, opts)
+      opts.picker = opts.picker or {}
+      opts.picker.sources = opts.picker.sources or {}
+
+      -- Explorer: docked left, full terminal height (never a centred popup).
+      local explorer = opts.picker.sources.explorer or {}
+      explorer.layout = {
+        preview = false,
+        layout = {
+          backdrop = false,
+          box = "vertical",
+          position = "left",
+          width = 0.26,
+          min_width = 34,
+          max_width = 60,
+          height = 0, -- 0 = full height
+          border = "none",
+          { win = "input", height = 1, border = "bottom", title = "{title} {live} {flags}", title_pos = "center" },
+          { win = "list", border = "none" },
+        },
+      }
+      opts.picker.sources.explorer = explorer
+
+      -- Every other picker (find file, grep, symbols, …) uses the full screen
+      -- instead of the small centred box.
+      opts.picker.layout = vim.tbl_deep_extend("force", opts.picker.layout or {}, {
+        preset = "default",
+        layout = { width = 0.95, height = 0, min_width = 40, border = "none" },
+      })
+
       if not S.features.dashboard then
         return opts
       end
@@ -52,9 +83,9 @@ return {
       opts.options = opts.options or {}
       opts.options.theme = {
         normal = {
-          a = { fg = P.base, bg = S.accent, gui = "bold" },
-          b = { fg = P.text, bg = P.surface0 },
-          c = { fg = P.subtext0, bg = P.base },
+          a = { fg = P.base, bg = ACCENT, gui = "bold" },
+          b = { fg = P.text, bg = S.transparent and "NONE" or P.surface0 },
+          c = { fg = P.subtext0, bg = "NONE" },
         },
         insert = { a = { fg = P.base, bg = P.teal, gui = "bold" } },
         visual = { a = { fg = P.base, bg = P.mauve, gui = "bold" } },
@@ -62,9 +93,9 @@ return {
         command = { a = { fg = P.base, bg = P.yellow, gui = "bold" } },
         terminal = { a = { fg = P.base, bg = P.green, gui = "bold" } },
         inactive = {
-          a = { fg = P.overlay1, bg = P.mantle },
-          b = { fg = P.overlay1, bg = P.mantle },
-          c = { fg = P.overlay1, bg = P.mantle },
+          a = { fg = P.overlay1, bg = "NONE" },
+          b = { fg = P.overlay1, bg = "NONE" },
+          c = { fg = P.overlay1, bg = "NONE" },
         },
       }
 
@@ -73,7 +104,7 @@ return {
       opts.sections = {
         lualine_a = { { "mode", padding = { left = 1, right = 1 } } },
         lualine_b = {
-          { "branch", icon = " ", color = { fg = P.subtext1 } },
+          { "branch", icon = " ", color = { fg = ACCENT2 } },
           {
             "diff",
             symbols = { added = icons.git.added, modified = icons.git.modified, removed = icons.git.removed },
@@ -85,7 +116,7 @@ return {
               return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") .. " "
             end,
             color = function()
-              return { fg = S.accent, bg = P.surface0, gui = "bold" }
+              return { fg = ACCENT, bg = P.surface0, gui = "bold" }
             end,
           },
           {
@@ -122,7 +153,7 @@ return {
             function()
               return " " .. S.name .. " "
             end,
-            color = { fg = P.base, bg = S.accent, gui = "bold" },
+            color = { fg = P.base, bg = ACCENT, gui = "bold" },
           },
         },
       }

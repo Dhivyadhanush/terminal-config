@@ -13,10 +13,14 @@ local M = {
   version = "1.0.0",
 
   -- ── colours ─────────────────────────────────────────────────────
-  -- accent  = cursor line, dashboard, statusline pill, mode colour
-  -- accent2 = icons, keys, secondary highlights
-  accent = "#8b9dff",
-  accent2 = "#5ee0c8",
+  -- The palette comes from your Ghostty theme (background, foreground,
+  -- ANSI 0-15, cursor). Set "auto" to keep the editor identical to the
+  -- terminal, or hardcode a hex value to override one accent.
+  use_terminal_theme = true,
+  transparent = true, -- let Ghostty's opacity/blur show through Neovim
+  blend = 15, -- 0 = crisp popups, 30 = very see-through (winblend/pumblend)
+  accent = "auto", -- cursor line, statusline pill, dashboard header
+  accent2 = "auto", -- icons, keys, secondary highlights
 
   -- ── features: set false to turn one off ─────────────────────────
   features = {
