@@ -2,3 +2,7 @@
 # OS noise
 .DS_Store
 *.swp
+.DS_Store
+*.bak
+*.bak-*
+config.kdl.bak*

@@ -1,0 +1,14 @@
+# Screenshots: browse everything macOS saves to ~/Documents/Screenshots.
+# /shot (aliases: /screenshot, /ss). Enter opens in Preview, Cmd+Enter reveals.
+id = "screenshots"
+name = "Screenshots"
+trigger = "shot"
+engine = "paths"
+kind = "files"
+scope = "screenshots"
+open_with = "Preview"
+secondary = "reveal"
+max_results = 500
+freeform = false
+priority = 55
+keywords = ["screenshot", "screen shot", "capture", "snip", "image"]

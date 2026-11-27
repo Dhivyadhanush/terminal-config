@@ -1,0 +1,17 @@
+# ~/.config/palette/commands.toml
+# Uncomment and edit these entries. Every command is shown before it runs.
+#
+# [[command]]
+# title = "Gradle Build"
+# keywords = ["gradle", "java", "build"]
+# executable = "gradle"
+# args = ["build"]
+# cwd = "~/dev/my-project"
+# terminal = true
+# confirm = false
+#
+# [[command]]
+# title = "Go Test"
+# executable = "go"
+# args = ["test", "./..."]
+# terminal = true

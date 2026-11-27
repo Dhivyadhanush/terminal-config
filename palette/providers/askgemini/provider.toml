@@ -1,0 +1,9 @@
+id = "askgemini"
+name = "Gemini Chat"
+trigger = "askgemini"
+command = ["./gemini_chat.py"]
+timeout_ms = 4000
+idle_timeout_s = 300
+icon = "symbol:sparkles"
+keywords = ["gemini", "chat", "ai", "google"]
+priority = 65

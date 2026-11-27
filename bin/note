@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# note — open Npad in this terminal, or run its CLI.
+#   note                 the TUI
+#   note ask "question"  ask your notes
+#   note list            list notes
+set -euo pipefail
+
+APP="${NPAD_HOME:-$HOME/Documents/project/npad}"
+
+if [ ! -x "$APP/npad.sh" ]; then
+	printf 'note: Npad not found at %s (set NPAD_HOME to move it)\n' "$APP" >&2
+	exit 1
+fi
+
+exec "$APP/npad.sh" "$@"

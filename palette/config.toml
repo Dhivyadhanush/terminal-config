@@ -1,0 +1,160 @@
+# Palette configuration
+
+hotkey = "cmd+space"
+clipboard_hotkey = "opt+v"
+terminal_hotkey = "cmd+option+t"
+scratchpad_hotkey = "cmd+option+s"
+ask_hotkey = "cmd+option+a"
+screenshot_hotkey = "cmd+shift+3"
+region_screenshot_hotkey = "cmd+shift+4"
+window_screenshot_hotkey = "cmd+shift+6"
+recording_hotkey = "cmd+shift+5"
+provider_prefix = "/"
+search_placeholder = ""
+tools_path = []
+terminal = "ghostty"
+terminal_app = "Ghostty"
+editor_open_with = "neovide"
+search_position = "top"
+web_app_browser = "Brave Browser"
+app_sort = "alphabetical"
+
+[window]
+preview_layout = "auto"
+provider_bar = "top"
+favicons = true
+
+[capture]
+directory = "~/Pictures/Palette"
+screenshot_format = "png"
+screenshot_action = "save-copy"
+recording_format = "mov"
+recording_action = "save"
+delay = 0.0
+hide_palette = true
+capture_cursor = false
+show_clicks = false
+edit_after_capture = false
+sound = true
+thumbnail = true
+preview_recording = true
+recording_target = "screen"
+recording_display = 1
+recording_region = ""
+recording_audio = false
+recording_microphone = ""
+gallery = "all"
+
+[cheatsheets]
+folders = []
+extensions = ["pdf", "html", "htm", "md", "markdown", "txt", "png", "jpg", "jpeg"]
+
+[timer]
+presets = [5, 10, 15, 25, 30, 45, 60]
+sound = true
+notify = true
+
+[updates]
+automatic = true
+
+[typography]
+ui_family = ""
+mono_family = ""
+ui_size = 0.0
+mono_size = 0.0
+
+[providers]
+order = ["pins", "apps", "calc", "search", "ask", "askh", "term", "scratch", "neo", "neof", "git", "cmd", "proj", "port", "web", "clip", "bw", "bwn", "bwo", "bwt", "bwu", "zj", "emoji", "system", "theme"]
+disabled = ["neo", "neof"]
+global = ["calc", "search", "web", "win", "unit", "zj", "bookmark", "pins", "system", "timer", "awake", "cheat"]
+missing_tool_acknowledged = []
+
+[providers.aliases]
+"askgemini" = ["gem", "gchat", "gemini"]
+"neo" = ["neo", "editor"]
+"neof" = ["neof", "folders"]
+"screenshots" = ["screenshot", "ss"]
+
+[terminal_session]
+multiplexer = "auto"
+name = "Palette"
+shell = ""
+font = ""
+font_size = 0.0
+
+[ask]
+provider = "opencode-go"
+model = "beam-free"
+max_history = 200
+retention_days = 30
+max_tokens = 512
+fallback = true
+notify = true
+web_search = true
+
+[theme]
+mode = "dark"
+dark = "gruvbox-dark"
+light = "default-light"
+
+[web_search]
+enabled = true
+
+[[web_search.engines]]
+name = "Google"
+url = "https://www.google.com/search?q={query}"
+keyword = "g"
+
+[[web_search.engines]]
+name = "DuckDuckGo"
+url = "https://duckduckgo.com/?q={query}"
+keyword = "ddg"
+
+[[web_search.engines]]
+name = "GitHub"
+url = "https://github.com/search?q={query}"
+keyword = "gh"
+
+[[web_search.engines]]
+name = "YouTube"
+url = "https://www.youtube.com/results?search_query={query}"
+keyword = "yt"
+
+[search]
+learn = true
+
+[scopes.home]
+roots = ["~"]
+exclude = ["node_modules", ".git", ".build", "target", ".next", "dist", "Library", ".cache", ".venv", "venv", "__pycache__", "DerivedData", "*.app", "*.framework", "*.dSYM", ".Trash", "Movies", "Music", "Pictures"]
+include = []
+include_hidden = false
+max_depth = 12
+respect_gitignore = false
+
+[scopes.projects]
+roots = ["~/dev", "~/dot-files"]
+exclude = ["node_modules", ".git", ".build", "target", ".next", "dist", "Library", ".cache", ".venv", "venv", "__pycache__", "DerivedData", "*.app", "*.framework", "*.dSYM"]
+include = []
+include_hidden = false
+max_depth = 12
+respect_gitignore = false
+
+[scopes.screenshots]
+roots = ["~/Documents/Screenshots"]
+exclude = ["*.tmp", "*.crdownload"]
+include = []
+include_hidden = false
+max_depth = 1
+respect_gitignore = false
+
+[clipboard]
+enabled = true
+max_entries = 5000
+poll_ms = 500
+clear_after_ms = 30000
+retention_days = 30
+max_image_bytes = 209715200
+ignored_apps = []
+
+[meta]
+config_version = 2

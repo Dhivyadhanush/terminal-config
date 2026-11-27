@@ -1,6 +1,6 @@
 # Ghostty configuration
-# Mirrors ~/.config/kitty/kitty.conf: DepartureMono Nerd Font 18, Catppuccin
-# Mocha (the one deliberate change from kitty's Dracula), 60% opacity with 40px
+# Mirrors ~/.config/kitty/kitty.conf: DepartureMono Nerd Font 18, Everforest
+# Dark (previously Catppuccin Mocha, then kitty's Dracula), 60% opacity with 40px
 # blur, hidden titlebar, block cursor, macOS Option-as-Alt on the left, and the
 # same CSI-u Enter mappings. zellij owns tabs and panes.
 
@@ -32,15 +32,15 @@ custom-shader-animation = true
 # kitty's visual_bell_duration has no Ghostty equivalent; bell-features below
 # keeps the border flash and dock attention instead.
 
-# Aesthetics - our custom dhanuz-mocha theme (Catppuccin Mocha, corrected).
-# Files live in ~/.config/ghostty/themes; `theme = Catppuccin Mocha` switches
+# Aesthetics - our custom dhanuz-everforest theme (Everforest Dark, corrected).
+# Files live in ~/.config/ghostty/themes; `theme = Everforest Dark Med` switches
 # back to the stock built-in palette.
-theme = dhanuz-mocha
+theme = dhanuz-everforest
 # Cursor colour is set here, not only in the theme, so it survives theme
-# swaps. Purple = Catppuccin mauve. Alternatives:
-#   vivid purple #bd93f9 | graphite grey #a6adc8 | rosewater #f5e0dc
-cursor-color = #cba6f7
-cursor-text = #1e1e2e
+# swaps. Orange = Everforest orange. Alternatives:
+#   orange #e69875 | green #a7c080 | aqua #83c092 | grey #d3c6aa
+cursor-color = #e69875
+cursor-text = #232a2e
 # Avoid a hard contrast floor that could crush intentional dim text, but stop
 # foreground/background from becoming unreadable.
 minimum-contrast = 1.1

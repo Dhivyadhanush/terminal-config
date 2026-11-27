@@ -1,0 +1,14 @@
+# Editor folder picker: the same provider as the bundled edit
+# provider, but restricted to directories. Edit this file to make it
+# yours.
+id = "neof"
+name = "Editor Folders"
+trigger = "editf"
+engine = "paths"
+kind = "directories"
+scope = "home"
+open_with = "editor"
+secondary = "reveal"
+max_results = 2000
+freeform = true
+priority = 60
